@@ -1,0 +1,32 @@
+---
+title: "Burtin Bacteria Final"
+author: "Carrie Bloom"
+date: "9/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(utf8)
+```
+
+```{r}
+anti<-read.csv("anti.csv", check.names = F)
+```
+
+```{r}
+anti=mutate(anti, avg=(pen+strep+neo)/3)
+anti=arrange(anti, avg)
+
+ggplot(data=anti) +
+  geom_point(size=3, mapping = aes(x=strep, y=reorder(abbr, -avg), shape = gram, color="Streptom"), position = position_nudge(x = 0.04)) +
+  geom_point(size=3, mapping = aes(x=pen, y=reorder(abbr, -avg), shape = gram, color="Penicilin")) +
+  geom_point(size=3, mapping = aes(x=neo, y=reorder(abbr, -avg), shape = gram, color="Neomycin")) +
+  scale_x_continuous(trans='log10') +
+  scale_color_manual(values=c("Streptom"="orange", "Penicilin"="blue", "Neomycin"="violetred3")) +
+  scale_shape_manual(values=c(17,16)) +
+  labs(title="Burtin's Bacteria" ,x = "Minimum Inhibitory Concentration (MIC)", y = "Bacteria", color = "Antibiotics", shape= "Gram Staining") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
